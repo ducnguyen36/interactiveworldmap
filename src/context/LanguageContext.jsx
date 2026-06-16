@@ -10,6 +10,10 @@ export function LanguageProvider({ children }) {
 
   useEffect(() => {
     i18n.changeLanguage(mode === 'en' ? 'en' : 'vi');
+    document.documentElement.lang = mode === 'en' ? 'en' : 'vi';
+    const tvi = i18n.getFixedT('vi');
+    const ten = i18n.getFixedT('en');
+    document.title = dualText(tvi('app.title'), ten('app.title'), mode);
   }, [mode]);
 
   const setMode = useCallback((next) => {

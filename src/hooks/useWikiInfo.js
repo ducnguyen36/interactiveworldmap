@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { entitiesUrl, getEntity, claimEntityId, label, siteTitle } from '../lib/wikidata.js';
 import { summaryUrl, parseSummary } from '../lib/wikipedia.js';
 
@@ -48,7 +48,7 @@ async function load(feature, langs) {
 
 export function useWikiInfo(feature, mode) {
   const [state, setState] = useState({ data: null, loading: false, error: null });
-  const langs = mode === 'dual' ? ['vi', 'en'] : [mode];
+  const langs = useMemo(() => (mode === 'dual' ? ['vi', 'en'] : [mode]), [mode]);
 
   const run = useCallback(() => {
     if (!feature) { setState({ data: null, loading: false, error: null }); return () => {}; }
@@ -58,8 +58,7 @@ export function useWikiInfo(feature, mode) {
       .then((data) => { if (active) setState({ data, loading: false, error: null }); })
       .catch((error) => { if (active) setState({ data: null, loading: false, error }); });
     return () => { active = false; };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [feature, mode]);
+  }, [feature, langs]);
 
   useEffect(() => run(), [run]);
   return { ...state, retry: run };
