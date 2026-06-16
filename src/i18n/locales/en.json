@@ -1,0 +1,21 @@
+{
+  "app.title": "Interactive World Map",
+  "panel.capital": "Capital",
+  "panel.population": "Population",
+  "panel.noData": "No data available for this area.",
+  "panel.loading": "Loading…",
+  "panel.retry": "Retry",
+  "panel.close": "Close",
+  "panel.readMore": "Read more on Wikipedia",
+  "control.title": "Map Layers",
+  "control.base": "Base map",
+  "control.overlays": "Overlays",
+  "control.comingSoon": "Coming soon",
+  "layer.political": "Political Map",
+  "layer.tectonic": "Tectonic Plates & Volcanoes",
+  "layer.currents": "Ocean Currents",
+  "layer.climate": "Climate Zones",
+  "layer.agriculture": "Agriculture",
+  "lang.label": "Language",
+  "theme.toggle": "Toggle light/dark theme"
+}

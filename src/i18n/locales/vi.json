@@ -1,0 +1,21 @@
+{
+  "app.title": "Bản đồ Thế giới Tương tác",
+  "panel.capital": "Thủ đô",
+  "panel.population": "Dân số",
+  "panel.noData": "Không có dữ liệu cho khu vực này.",
+  "panel.loading": "Đang tải…",
+  "panel.retry": "Thử lại",
+  "panel.close": "Đóng",
+  "panel.readMore": "Đọc thêm trên Wikipedia",
+  "control.title": "Lớp bản đồ",
+  "control.base": "Bản đồ nền",
+  "control.overlays": "Lớp phủ",
+  "control.comingSoon": "Sắp có",
+  "layer.political": "Bản đồ Chính trị",
+  "layer.tectonic": "Mảng kiến tạo & Núi lửa",
+  "layer.currents": "Dòng biển",
+  "layer.climate": "Đới khí hậu",
+  "layer.agriculture": "Nông nghiệp",
+  "lang.label": "Ngôn ngữ",
+  "theme.toggle": "Đổi giao diện sáng/tối"
+}
