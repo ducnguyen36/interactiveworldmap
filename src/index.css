@@ -11,6 +11,8 @@
   --panel-text: #1f2933;
   --plate: #d64545;
   --volcano: #b91c1c;
+  --current-warm: #d64545;
+  --current-cold: #2f6fb0;
 }
 .dark {
   --map-ocean: #0b1f2a;
@@ -21,6 +23,8 @@
   --panel-text: #e5e7eb;
   --plate: #f87171;
   --volcano: #fca5a5;
+  --current-warm: #f87171;
+  --current-cold: #60a5fa;
 }
 
 html, body, #root { height: 100%; margin: 0; }
@@ -39,3 +43,14 @@ html, body, #root { height: 100%; margin: 0; }
 .ocean-label { background: transparent; border: none; box-shadow: none;
   color: var(--panel-text); opacity: 0.7; font-style: italic; font-size: 12px; }
 .leaflet-tooltip.country-label::before, .leaflet-tooltip.ocean-label::before { display: none; }
+
+/* Ocean currents */
+.current-warm { stroke: var(--current-warm); }
+.current-cold { stroke: var(--current-cold); }
+.arrow-warm { color: var(--current-warm); }
+.arrow-cold { color: var(--current-cold); }
+.current-arrow, .ag-marker { background: none; border: none; }
+
+/* Themed Leaflet attribution (replaces default light box) */
+.leaflet-control-attribution { background: var(--panel-bg) !important; color: var(--panel-text); font-size: 10px; }
+.leaflet-control-attribution a { color: var(--panel-text); }

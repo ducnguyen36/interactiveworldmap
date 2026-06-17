@@ -7,6 +7,7 @@ const PLATES = 'https://raw.githubusercontent.com/fraxen/tectonicplates/master/G
 // Natural Earth does not publish a volcanoes GeoJSON; use the GVP (Global Volcanism Program)
 // dataset mirrored via TidyTuesday (source: Smithsonian Institution GVP, CC0).
 const VOLCANOES_CSV = 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv';
+const CLIMATE = 'https://raw.githubusercontent.com/circleofconfusion/climate-map/master/topojson/1976-2000.geojson';
 
 const KEEP = ['NAME_VI', 'NAME_EN', 'NAME_LONG', 'WIKIDATAID', 'ISO_A2', 'ISO_A3', 'CONTINENT', 'POP_EST', 'LABELRANK'];
 
@@ -30,6 +31,17 @@ function trimCountries(fc) {
       for (const k of KEEP) if (k in f.properties) props[k] = f.properties[k];
       return { type: 'Feature', properties: props, geometry: f.geometry };
     }),
+  };
+}
+
+function trimClimate(fc) {
+  return {
+    type: 'FeatureCollection',
+    features: fc.features.map((f) => ({
+      type: 'Feature',
+      properties: { CODE: f.properties.CODE ?? null },
+      geometry: f.geometry,
+    })),
   };
 }
 
@@ -62,13 +74,14 @@ function csvToVolcanoesGeoJSON(csvText) {
 
 async function main() {
   await mkdir(OUT, { recursive: true });
-  const [countries, plates, volcanoCSV] = await Promise.all([
-    getJson(COUNTRIES), getJson(PLATES), getText(VOLCANOES_CSV),
+  const [countries, plates, volcanoCSV, climate] = await Promise.all([
+    getJson(COUNTRIES), getJson(PLATES), getText(VOLCANOES_CSV), getJson(CLIMATE),
   ]);
   await writeFile(new URL('countries.geojson', OUT), JSON.stringify(trimCountries(countries)));
   await writeFile(new URL('plates.geojson', OUT), JSON.stringify(plates));
   await writeFile(new URL('volcanoes.geojson', OUT), JSON.stringify(csvToVolcanoesGeoJSON(volcanoCSV)));
-  console.log('Wrote countries, plates, volcanoes to public/data/');
+  await writeFile(new URL('climate.geojson', OUT), JSON.stringify(trimClimate(climate)));
+  console.log('Wrote countries, plates, volcanoes, climate to public/data/');
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
