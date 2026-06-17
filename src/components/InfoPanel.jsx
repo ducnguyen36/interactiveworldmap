@@ -84,7 +84,10 @@ export default function InfoPanel({ injectedSelection, activeOverlayIds = new Se
           {featureLabel && <p className="text-sm font-semibold opacity-80">{featureLabel}</p>}
           {summary.loading && <p className="opacity-70">{tt('panel.loading')}</p>}
           {!summary.loading && summary.extracts.length === 0 && (
-            <p className="opacity-70">{tt('panel.noData')}</p>
+            <div>
+              <p className="opacity-70">{tt('panel.noData')}</p>
+              <button onClick={summary.retry} className="mt-2 px-3 py-1 rounded border">{tt('panel.retry')}</button>
+            </div>
           )}
           <WikiExtracts extracts={summary.extracts} />
         </div>

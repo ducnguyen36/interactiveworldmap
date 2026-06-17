@@ -45,9 +45,11 @@ export default function CountryLayerFacts({ iso2, bounds, nameVi, nameEn, active
       {climateActive && (
         <div>
           <p className="font-semibold text-sm">{tt('layer.climate')}</p>
-          {climate.extracts.length > 0
-            ? <WikiExtracts extracts={climate.extracts} />
-            : <p className="text-sm opacity-70">{tt('panel.climateNote')}</p>}
+          {climate.loading
+            ? <p className="text-sm opacity-70">{tt('panel.loading')}</p>
+            : climate.extracts.length > 0
+              ? <WikiExtracts extracts={climate.extracts} />
+              : <p className="text-sm opacity-70">{tt('panel.climateNote')}</p>}
         </div>
       )}
 
