@@ -9,7 +9,7 @@ const PLATES = 'https://raw.githubusercontent.com/fraxen/tectonicplates/master/G
 const VOLCANOES_CSV = 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv';
 const CLIMATE = 'https://raw.githubusercontent.com/circleofconfusion/climate-map/master/topojson/1976-2000.geojson';
 
-const KEEP = ['NAME_VI', 'NAME_EN', 'NAME_LONG', 'WIKIDATAID', 'ISO_A2', 'ISO_A3', 'CONTINENT', 'POP_EST', 'LABELRANK'];
+const KEEP = ['NAME_VI', 'NAME_EN', 'NAME_LONG', 'WIKIDATAID', 'ISO_A2', 'ISO_A3', 'CONTINENT', 'POP_EST', 'LABELRANK', 'MAPCOLOR7'];
 
 async function getJson(url) {
   const res = await fetch(url);
