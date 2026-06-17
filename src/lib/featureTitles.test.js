@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { featureWikiTitles, climateTitles } from './featureTitles.js';
+import { featureWikiTitles } from './featureTitles.js';
 
 describe('featureWikiTitles', () => {
   it('volcano → name in both languages', () => {
@@ -21,12 +21,5 @@ describe('featureWikiTitles', () => {
   it('climate → koppen article candidates for the code', () => {
     expect(featureWikiTitles({ kind: 'climate', code: 'Af' }, null))
       .toEqual({ vi: ['Khí hậu rừng mưa nhiệt đới', 'Phân loại khí hậu Köppen'], en: ['Tropical rainforest climate', 'Köppen climate classification'] });
-  });
-});
-
-describe('climateTitles', () => {
-  it('builds Climate of {country} + vi candidates', () => {
-    expect(climateTitles('Việt Nam', 'Vietnam'))
-      .toEqual({ vi: ['Khí hậu Việt Nam', 'Khí hậu của Việt Nam'], en: ['Climate of Vietnam'] });
   });
 });

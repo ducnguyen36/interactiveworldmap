@@ -10,15 +10,9 @@ vi.mock('../hooks/useGeoData.js', () => ({
     return { data: null, loading: false, error: null };
   },
 }));
-vi.mock('../hooks/useWikiSummary.js', () => ({
-  useWikiSummary: (titles) => titles
-    ? { extracts: [{ lang: 'en', title: 'Climate of Vietnam', extract: 'Tropical climate.' }], loading: false, error: null, retry: () => {} }
-    : { extracts: [], loading: false, error: null, retry: () => {} },
-}));
-
 import CountryLayerFacts from './CountryLayerFacts.jsx';
 
-const props = { iso2: 'VN', nameVi: 'Việt Nam', nameEn: 'Vietnam', bounds: { south: 8, west: 102, north: 23, east: 110 } };
+const props = { iso2: 'VN', bounds: { south: 8, west: 102, north: 23, east: 110 } };
 
 function renderWith(overlayIds) {
   return render(
@@ -44,9 +38,5 @@ describe('CountryLayerFacts', () => {
     renderWith(['tectonic']);
     expect(screen.getByText(/Số núi lửa/)).toBeInTheDocument();
     expect(screen.getByText(/\b1\b/)).toBeInTheDocument();
-  });
-  it('shows the climate extract when climate active', () => {
-    renderWith(['climate']);
-    expect(screen.getByText('Tropical climate.')).toBeInTheDocument();
   });
 });

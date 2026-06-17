@@ -18,10 +18,3 @@ export function featureWikiTitles(feature, countryName) {
     : [feature.en];
   return { vi: [feature.vi], en };
 }
-
-export function climateTitles(nameVi, nameEn) {
-  return {
-    vi: [`Khí hậu ${nameVi}`, `Khí hậu của ${nameVi}`],
-    en: [`Climate of ${nameEn}`],
-  };
-}

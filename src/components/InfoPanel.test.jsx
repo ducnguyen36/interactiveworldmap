@@ -56,4 +56,10 @@ describe('InfoPanel', () => {
     expect(screen.getByText('Mount Fuji')).toBeInTheDocument();
     expect(screen.getByText('Núi lửa')).toBeInTheDocument();
   });
+  it('renders a climate feature view with code, group and description', () => {
+    renderWith({ kind: 'climate', code: 'Af' });
+    expect(screen.getByText('Af')).toBeInTheDocument();
+    expect(screen.getByText('Nhiệt đới (A)')).toBeInTheDocument();
+    expect(screen.getByText('A warm current.')).toBeInTheDocument();
+  });
 });

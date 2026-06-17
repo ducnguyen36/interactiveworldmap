@@ -4,6 +4,7 @@ import { useWikiInfo } from '../hooks/useWikiInfo.js';
 import { useWikiSummary } from '../hooks/useWikiSummary.js';
 import { useGeoData } from '../hooks/useGeoData.js';
 import { dualText } from '../lib/dualText.js';
+import { climateClass } from '../lib/climate.js';
 import { featureWikiTitles } from '../lib/featureTitles.js';
 import WikiExtracts from './WikiExtracts.jsx';
 import CountryLayerFacts from './CountryLayerFacts.jsx';
@@ -30,12 +31,15 @@ export default function InfoPanel({ injectedSelection, activeOverlayIds = new Se
 
   const title =
     kind === 'volcano' ? (feature.name || '') :
+    kind === 'climate' ? (feature.code || '') :
     kind === 'commodity' ? dualText(feature.vi, feature.en, mode) :
     dualText(feature.nameVi, feature.nameEn, mode);
 
+  const climateGroup = kind === 'climate' ? climateClass(feature.code).group : null;
   const featureLabel =
     kind === 'current' ? tt(feature.type === 'warm' ? 'legend.warmCurrent' : 'legend.coldCurrent') :
     kind === 'volcano' ? tt('legend.volcano') :
+    kind === 'climate' ? (['A', 'B', 'C', 'D', 'E'].includes(climateGroup) ? tt(`legend.climate${climateGroup}`) : null) :
     kind === 'commodity' ? `${tt('panel.majorProducer')}${countryName ? ': ' + dualText(countryName.vi, countryName.en, mode) : ''}` :
     null;
 
@@ -73,11 +77,7 @@ export default function InfoPanel({ injectedSelection, activeOverlayIds = new Se
               <WikiExtracts extracts={wiki.data.extracts} />
             </div>
           )}
-          <CountryLayerFacts
-            iso2={feature.iso2} bounds={feature.bounds}
-            nameVi={feature.nameVi} nameEn={feature.nameEn}
-            activeOverlayIds={activeOverlayIds}
-          />
+          <CountryLayerFacts iso2={feature.iso2} bounds={feature.bounds} activeOverlayIds={activeOverlayIds} />
         </>
       ) : (
         <div className="mt-3 space-y-3">
