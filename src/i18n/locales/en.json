@@ -17,5 +17,17 @@
   "layer.climate": "Climate Zones",
   "layer.agriculture": "Agriculture",
   "lang.label": "Language",
-  "theme.toggle": "Toggle light/dark theme"
+  "theme.toggle": "Toggle light/dark theme",
+  "legend.warmCurrent": "Warm current",
+  "legend.coldCurrent": "Cold current",
+  "legend.plateBoundary": "Plate boundary",
+  "legend.volcano": "Volcano",
+  "legend.climateA": "Tropical (A)",
+  "legend.climateB": "Arid (B)",
+  "legend.climateC": "Temperate (C)",
+  "legend.climateD": "Continental (D)",
+  "legend.climateE": "Polar (E)",
+  "lang.vietnamese": "Tiếng Việt",
+  "lang.english": "English",
+  "lang.dual": "Song ngữ"
 }

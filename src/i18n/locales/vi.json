@@ -17,5 +17,17 @@
   "layer.climate": "Đới khí hậu",
   "layer.agriculture": "Nông nghiệp",
   "lang.label": "Ngôn ngữ",
-  "theme.toggle": "Đổi giao diện sáng/tối"
+  "theme.toggle": "Đổi giao diện sáng/tối",
+  "legend.warmCurrent": "Dòng biển nóng",
+  "legend.coldCurrent": "Dòng biển lạnh",
+  "legend.plateBoundary": "Ranh giới mảng",
+  "legend.volcano": "Núi lửa",
+  "legend.climateA": "Nhiệt đới (A)",
+  "legend.climateB": "Khô hạn (B)",
+  "legend.climateC": "Ôn đới (C)",
+  "legend.climateD": "Lục địa (D)",
+  "legend.climateE": "Cực (E)",
+  "lang.vietnamese": "Tiếng Việt",
+  "lang.english": "English",
+  "lang.dual": "Song ngữ"
 }

@@ -7,6 +7,7 @@ import Header from './components/Header.jsx';
 import LayerControl from './components/LayerControl.jsx';
 import MapView from './components/MapView.jsx';
 import InfoPanel from './components/InfoPanel.jsx';
+import Legend from './components/Legend.jsx';
 
 export default function App() {
   const [activeBaseId, setActiveBaseId] = useState(
@@ -33,6 +34,7 @@ export default function App() {
                 activeBaseId={activeBaseId} setActiveBaseId={setActiveBaseId}
                 activeOverlayIds={activeOverlayIds} toggleOverlay={toggleOverlay}
               />
+              <Legend activeOverlayIds={activeOverlayIds} />
               <InfoPanel />
             </main>
           </div>
