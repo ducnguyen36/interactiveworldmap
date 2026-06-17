@@ -37,12 +37,15 @@ export default function PoliticalLayer() {
         if (selectedElRef.current) selectedElRef.current.classList.remove('country-selected');
         const el = layer.getElement();
         if (el) { el.classList.add('country-selected'); selectedElRef.current = el; }
+        const b = layer.getBounds();
         setSelected({
+          kind: 'country',
           wikidata: p.WIKIDATAID || null,
           iso2: p.ISO_A2 && p.ISO_A2 !== '-99' ? p.ISO_A2 : null,
           nameVi: p.NAME_VI, nameEn: p.NAME_EN, population: p.POP_EST ?? null,
+          bounds: { south: b.getSouth(), west: b.getWest(), north: b.getNorth(), east: b.getEast() },
         });
-        map.fitBounds(layer.getBounds(), { animate: true, maxZoom: 5, padding: [20, 20] });
+        map.fitBounds(b, { animate: true, maxZoom: 5, padding: [20, 20] });
       },
     });
   };

@@ -3,11 +3,13 @@ import { GeoJSON, Marker } from 'react-leaflet';
 import { useGeoData } from '../../hooks/useGeoData.js';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 import { dualText } from '../../lib/dualText.js';
+import { useSelection } from '../../context/SelectionContext.jsx';
 import { bearing } from '../../lib/bearing.js';
 
 export default function CurrentsLayer() {
   const { data } = useGeoData('/data/currents.geojson');
   const { mode } = useLanguage();
+  const { setSelected } = useSelection();
   if (!data) return null;
 
   return (
@@ -16,9 +18,11 @@ export default function CurrentsLayer() {
         key={mode}
         data={data}
         style={(f) => ({ className: f.properties.type === 'warm' ? 'current-warm' : 'current-cold', weight: 2.5 })}
-        onEachFeature={(f, layer) =>
-          layer.bindTooltip(dualText(f.properties.name_vi, f.properties.name_en, mode), { sticky: true })
-        }
+        onEachFeature={(f, layer) => {
+          const p = f.properties;
+          layer.bindTooltip(dualText(p.name_vi, p.name_en, mode), { sticky: true });
+          layer.on('click', () => setSelected({ kind: 'current', nameVi: p.name_vi, nameEn: p.name_en, type: p.type }));
+        }}
       />
       {data.features.map((f, i) => {
         const cs = f.geometry.coordinates;

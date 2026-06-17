@@ -1,10 +1,12 @@
 import L from 'leaflet';
 import { GeoJSON } from 'react-leaflet';
 import { useGeoData } from '../../hooks/useGeoData.js';
+import { useSelection } from '../../context/SelectionContext.jsx';
 
 export default function TectonicLayer() {
   const { data: plates } = useGeoData('/data/plates.geojson');
   const { data: volcanoes } = useGeoData('/data/volcanoes.geojson');
+  const { setSelected } = useSelection();
 
   return (
     <>
@@ -18,7 +20,9 @@ export default function TectonicLayer() {
             L.circleMarker(latlng, { radius: 3.5, className: 'volcano', fillOpacity: 0.9 })
           }
           onEachFeature={(feature, layer) => {
-            if (feature.properties?.name) layer.bindTooltip(feature.properties.name, { sticky: true });
+            const name = feature.properties?.name || null;
+            if (name) layer.bindTooltip(name, { sticky: true });
+            layer.on('click', () => setSelected({ kind: 'volcano', name }));
           }}
         />
       )}
