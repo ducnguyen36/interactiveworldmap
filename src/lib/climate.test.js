@@ -28,6 +28,7 @@ describe('koppenArticle', () => {
     expect(koppenArticle('Cfb').en[0]).toBe('Oceanic climate');
     expect(koppenArticle('Dfb').en[0]).toBe('Humid continental climate');
     expect(koppenArticle('Dfc').en[0]).toBe('Subarctic climate');
+    expect(koppenArticle('Dsc').en[0]).toBe('Subarctic climate');
     expect(koppenArticle('ET').en[0]).toBe('Tundra');
     expect(koppenArticle('EF').en[0]).toBe('Ice cap climate');
   });
