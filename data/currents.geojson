@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    { "type": "Feature", "properties": { "name_vi": "Dòng Gulf Stream", "name_en": "Gulf Stream", "type": "warm" }, "geometry": { "type": "LineString", "coordinates": [[-80, 25], [-65, 35], [-50, 41], [-35, 45]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Bắc Đại Tây Dương", "name_en": "North Atlantic Drift", "type": "warm" }, "geometry": { "type": "LineString", "coordinates": [[-35, 45], [-15, 53], [3, 60]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Cư-rô-si-ô", "name_en": "Kuroshio Current", "type": "warm" }, "geometry": { "type": "LineString", "coordinates": [[122, 24], [132, 31], [142, 36], [150, 39]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Bắc Thái Bình Dương", "name_en": "North Pacific Current", "type": "warm" }, "geometry": { "type": "LineString", "coordinates": [[150, 39], [180, 43], [-150, 45]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng A-la-xca", "name_en": "Alaska Current", "type": "warm" }, "geometry": { "type": "LineString", "coordinates": [[-145, 52], [-150, 57], [-160, 58]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Bra-xin", "name_en": "Brazil Current", "type": "warm" }, "geometry": { "type": "LineString", "coordinates": [[-38, -14], [-48, -26], [-55, -37]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Đông Úc", "name_en": "East Australian Current", "type": "warm" }, "geometry": { "type": "LineString", "coordinates": [[153, -27], [152, -34], [150, -41]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Mũi Kim (Agulhas)", "name_en": "Agulhas Current", "type": "warm" }, "geometry": { "type": "LineString", "coordinates": [[33, -29], [28, -35], [22, -38]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Xích đạo Bắc", "name_en": "North Equatorial Current", "type": "warm" }, "geometry": { "type": "LineString", "coordinates": [[-18, 9], [-45, 11], [-68, 13]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng La-bra-đo", "name_en": "Labrador Current", "type": "cold" }, "geometry": { "type": "LineString", "coordinates": [[-55, 60], [-52, 52], [-49, 45]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Ca-li-phoóc-ni-a", "name_en": "California Current", "type": "cold" }, "geometry": { "type": "LineString", "coordinates": [[-126, 46], [-123, 36], [-116, 26]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Pê-ru (Humboldt)", "name_en": "Humboldt Current", "type": "cold" }, "geometry": { "type": "LineString", "coordinates": [[-72, -17], [-75, -29], [-74, -40]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Ca-na-ri", "name_en": "Canary Current", "type": "cold" }, "geometry": { "type": "LineString", "coordinates": [[-13, 33], [-17, 25], [-20, 17]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Ben-ghê-la", "name_en": "Benguela Current", "type": "cold" }, "geometry": { "type": "LineString", "coordinates": [[15, -32], [13, -23], [11, -15]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Ôi-a-si-ô", "name_en": "Oyashio Current", "type": "cold" }, "geometry": { "type": "LineString", "coordinates": [[162, 56], [152, 49], [146, 43]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Phôn-len (Malvinas)", "name_en": "Falkland Current", "type": "cold" }, "geometry": { "type": "LineString", "coordinates": [[-60, -50], [-56, -43], [-53, -38]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Tây Úc", "name_en": "West Australian Current", "type": "cold" }, "geometry": { "type": "LineString", "coordinates": [[111, -24], [113, -31], [115, -37]] } },
+    { "type": "Feature", "properties": { "name_vi": "Dòng Hoàn lưu Nam Cực", "name_en": "Antarctic Circumpolar Current", "type": "cold" }, "geometry": { "type": "LineString", "coordinates": [[-150, -57], [-90, -58], [-30, -57], [20, -56]] } }
+  ]
+}

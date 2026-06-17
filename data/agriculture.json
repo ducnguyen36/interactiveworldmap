@@ -1,0 +1,11 @@
+{
+  "rice": [ {"iso2":"CN","coord":[35,103]}, {"iso2":"IN","coord":[22,79]}, {"iso2":"ID","coord":[-2,118]}, {"iso2":"BD","coord":[24,90]}, {"iso2":"VN","coord":[16,108]}, {"iso2":"TH","coord":[15,101]} ],
+  "wheat": [ {"iso2":"CN","coord":[35,103]}, {"iso2":"IN","coord":[22,79]}, {"iso2":"RU","coord":[60,100]}, {"iso2":"US","coord":[39,-98]}, {"iso2":"FR","coord":[46,2]} ],
+  "maize": [ {"iso2":"US","coord":[39,-98]}, {"iso2":"CN","coord":[35,103]}, {"iso2":"BR","coord":[-10,-52]}, {"iso2":"AR","coord":[-34,-64]}, {"iso2":"MX","coord":[23,-102]} ],
+  "coffee": [ {"iso2":"BR","coord":[-10,-52]}, {"iso2":"VN","coord":[16,108]}, {"iso2":"CO","coord":[4,-73]}, {"iso2":"ID","coord":[-2,118]}, {"iso2":"ET","coord":[9,40]} ],
+  "tea": [ {"iso2":"CN","coord":[30,110]}, {"iso2":"IN","coord":[26,92]}, {"iso2":"KE","coord":[0,38]}, {"iso2":"LK","coord":[7,81]} ],
+  "cattle": [ {"iso2":"BR","coord":[-10,-52]}, {"iso2":"IN","coord":[22,79]}, {"iso2":"US","coord":[39,-98]}, {"iso2":"CN","coord":[35,103]}, {"iso2":"AR","coord":[-34,-64]} ],
+  "pigs": [ {"iso2":"CN","coord":[35,113]}, {"iso2":"US","coord":[41,-92]}, {"iso2":"BR","coord":[-22,-48]}, {"iso2":"DE","coord":[51,10]}, {"iso2":"ES","coord":[40,-3]} ],
+  "sheep": [ {"iso2":"CN","coord":[40,95]}, {"iso2":"AU","coord":[-30,144]}, {"iso2":"IN","coord":[22,79]}, {"iso2":"IR","coord":[32,53]}, {"iso2":"NZ","coord":[-42,172]} ],
+  "poultry": [ {"iso2":"US","coord":[39,-98]}, {"iso2":"CN","coord":[35,103]}, {"iso2":"BR","coord":[-10,-52]}, {"iso2":"ID","coord":[-2,118]} ]
+}

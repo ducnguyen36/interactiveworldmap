@@ -1,0 +1,9 @@
+{
+  "features": [
+    { "id": "pacific", "name_vi": "Thái Bình Dương", "name_en": "Pacific Ocean", "wikidata": "Q98", "coord": [0, -150] },
+    { "id": "atlantic", "name_vi": "Đại Tây Dương", "name_en": "Atlantic Ocean", "wikidata": "Q97", "coord": [10, -35] },
+    { "id": "indian", "name_vi": "Ấn Độ Dương", "name_en": "Indian Ocean", "wikidata": "Q1239", "coord": [-25, 80] },
+    { "id": "arctic", "name_vi": "Bắc Băng Dương", "name_en": "Arctic Ocean", "wikidata": "Q788", "coord": [78, 0] },
+    { "id": "southern", "name_vi": "Nam Đại Dương", "name_en": "Southern Ocean", "wikidata": "Q4918", "coord": [-65, 140] }
+  ]
+}
