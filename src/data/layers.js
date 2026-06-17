@@ -9,6 +9,13 @@ import { climateClass } from '../lib/climate.js';
 export const LAYERS = [
   { id: 'political', labelKey: 'layer.political', kind: 'base', enabledByDefault: true, component: PoliticalLayer },
   {
+    id: 'climate', labelKey: 'layer.climate', kind: 'overlay', component: ClimateLayer,
+    legend: { items: ['A', 'B', 'C', 'D', 'E'].map((g) => ({
+      swatch: climateClass(g).color,
+      labelKey: `legend.climate${g}`,
+    })) },
+  },
+  {
     id: 'tectonic', labelKey: 'layer.tectonic', kind: 'overlay', component: TectonicLayer,
     legend: { items: [
       { swatch: 'var(--plate)', shape: 'line', labelKey: 'legend.plateBoundary' },
@@ -21,13 +28,6 @@ export const LAYERS = [
       { swatch: 'var(--current-warm)', shape: 'line', labelKey: 'legend.warmCurrent' },
       { swatch: 'var(--current-cold)', shape: 'line', labelKey: 'legend.coldCurrent' },
     ] },
-  },
-  {
-    id: 'climate', labelKey: 'layer.climate', kind: 'overlay', component: ClimateLayer,
-    legend: { items: ['A', 'B', 'C', 'D', 'E'].map((g) => ({
-      swatch: climateClass(g).color,
-      labelKey: `legend.climate${g}`,
-    })) },
   },
   {
     id: 'agriculture', labelKey: 'layer.agriculture', kind: 'overlay', component: AgricultureLayer,
