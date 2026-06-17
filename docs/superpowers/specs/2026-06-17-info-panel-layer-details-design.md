@@ -96,7 +96,7 @@ general commodity article only.
 - Build `titles = featureWikiTitles(feature, countryName)` for non-country kinds and call
   `useWikiSummary(kind === 'country' ? null : titles, mode)` (also unconditional).
 - **country**: existing header + flag/capital/population/extract, then
-  `<CountryLayerFacts iso2 bounds activeOverlayIds />`.
+  `<CountryLayerFacts iso2 bounds nameVi nameEn activeOverlayIds />`.
 - **current / volcano / commodity**: a header (current/commodity → `dualText`, volcano →
   name; commodity also shows its icon), a small type/label line (warm/cold via
   `legend.warmCurrent/coldCurrent`; volcano via `legend.volcano`; commodity via
@@ -104,21 +104,32 @@ general commodity article only.
   like the country extracts (thumbnail + text + read-more link), with loading/error states.
 
 ### CountryLayerFacts (new)
-- Props: `iso2`, `bounds`, `activeOverlayIds`.
+- Props: `iso2`, `bounds`, `nameVi`, `nameEn`, `activeOverlayIds`.
 - Loads `/data/agriculture.json` and `/data/volcanoes.geojson` via `useGeoData`
-  (unconditional; cached). Renders conditionally on `activeOverlayIds`:
+  (unconditional; cached). Calls `useWikiSummary(climateActive ? climateTitles(nameVi,nameEn) : null, mode)`
+  for the climate description (unconditional hook call). Renders conditionally on
+  `activeOverlayIds`:
   - agriculture → `panel.agricultureProducts` + commodity icons/names from
     `commoditiesForCountry(agData, iso2)` mapped through `COMMODITIES`.
   - tectonic → `panel.volcanoes` + `volcanoCountInBounds(volcanoData, bounds)`.
-  - climate → `panel.climateNote`. currents → `panel.currentsNote`.
+  - climate → heading `layer.climate` + the **"Climate of {Country}"** Wikipedia extract
+    (from `useWikiSummary`, English fallback); if no article is found anywhere, fall back to
+    `panel.climateNote`.
+  - currents → `panel.currentsNote` (currents aren't country-specific — detail comes from
+    clicking a current line).
 - Returns `null` if no active overlay produces a line. Titled with `panel.layerDetails`.
 
 ## Pure helpers (`src/lib/`, unit-tested)
 ```
 featureWikiTitles(feature, countryName) -> { vi: string[], en: string[] }
+climateTitles(nameVi, nameEn)           -> { vi: string[], en: string[] }   // "Climate of {country}" candidates
 commoditiesForCountry(agData, iso2)     -> string[]   // commodity ids present for iso2
 volcanoCountInBounds(volcanoData, bounds) -> number   // points with lng in [west,east], lat in [south,north]
 ```
+
+`climateTitles` returns `en: ["Climate of {nameEn}"]` and
+`vi: ["Khí hậu {nameVi}", "Khí hậu của {nameVi}"]` (Vietnamese article naming varies, so two
+candidates; English fallback covers the common case).
 
 ## Layer component changes
 - `PoliticalLayer`: click handler adds `kind:'country'` + `bounds` (`layer.getBounds()`).
@@ -146,20 +157,23 @@ Feature warm/cold/volcano labels reuse `legend.warmCurrent`/`legend.coldCurrent`
 
 ## Testing
 - Unit: `featureWikiTitles` (volcano/current/commodity, with and without countryName),
-  `commoditiesForCountry` (several / none / dedupe), `volcanoCountInBounds` (in/out/empty).
+  `climateTitles` (builds "Climate of {country}" + vi candidates), `commoditiesForCountry`
+  (several / none / dedupe), `volcanoCountInBounds` (in/out/empty).
 - Unit (hook): `useWikiSummary` — picks first matching candidate; English fallback when vi
   missing; inert on null (mocked fetch).
 - Component: InfoPanel renders a current feature view with a fetched extract (mocked);
-  renders the country facts section (agriculture products + volcano count) with mocked data
-  + active overlays; renders nothing extra when no overlays active.
+  renders the country facts section (agriculture products + volcano count + the climate
+  extract when climate active) with mocked data + active overlays; renders nothing extra
+  when no overlays active.
 - Full suite stays green (current 37 + new).
 
 ## Success criteria
 - Clicking the coffee marker on India shows the "Coffee production in India" Wikipedia
   extract (English fallback if needed); clicking a volcano shows its article; clicking a
   current shows its article.
-- Clicking a country with overlays active shows a "Layer details" section (agricultural
-  products / volcano count / climate / currents notes per active overlay).
-- Language switching (VI/EN/Dual) applies to all new panel text; feature extracts follow the
-  language with English fallback.
+- Clicking a country with the Climate layer active shows that country's climate description
+  ("Climate of {Country}"); with Agriculture active shows its crops; with Tectonic active
+  shows its volcano count — one "Layer details" section combining the active overlays.
+- Language switching (VI/EN/Dual) applies to all new panel text; feature/climate extracts
+  follow the language with English fallback.
 - Tests green; `npm run build` clean.
