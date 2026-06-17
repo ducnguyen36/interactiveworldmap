@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
 import { GeoJSON } from 'react-leaflet';
 import { useGeoData } from '../../hooks/useGeoData.js';
 import { useSelection } from '../../context/SelectionContext.jsx';
@@ -10,16 +10,17 @@ export default function ClimateLayer() {
   const geoRef = useRef(null);
   const selectedRef = useRef(null);
 
-  if (!data) return null;
-
-  const style = (f) => ({
+  // style/onEachFeature are memoized so their identity stays stable across re-renders.
+  // Otherwise react-leaflet's GeoJSON re-applies `style` to every feature on each render
+  // (it runs setStyle when the style prop identity changes), wiping the click highlight.
+  const style = useCallback((f) => ({
     fillColor: climateClass(f.properties.CODE).color,
     fillOpacity: 0.8,
     weight: 0,
     color: '#111111',
-  });
+  }), []);
 
-  const onEachFeature = (feature, layer) => {
+  const onEachFeature = useCallback((feature, layer) => {
     layer.on({
       mouseover: (e) => { if (e.target !== selectedRef.current) e.target.setStyle({ weight: 1, color: '#333333' }); },
       mouseout: (e) => { if (e.target !== selectedRef.current) geoRef.current?.resetStyle(e.target); },
@@ -31,7 +32,9 @@ export default function ClimateLayer() {
         setSelected({ kind: 'climate', code: feature.properties.CODE });
       },
     });
-  };
+  }, [setSelected]);
+
+  if (!data) return null;
 
   return <GeoJSON ref={geoRef} data={data} style={style} onEachFeature={onEachFeature} />;
 }
