@@ -1,0 +1,28 @@
+import { describe, it, expect } from 'vitest';
+import { featureWikiTitles, climateTitles } from './featureTitles.js';
+
+describe('featureWikiTitles', () => {
+  it('volcano → name in both languages', () => {
+    expect(featureWikiTitles({ kind: 'volcano', name: 'Mount Fuji' }, null))
+      .toEqual({ vi: ['Mount Fuji'], en: ['Mount Fuji'] });
+  });
+  it('current → vi/en names', () => {
+    expect(featureWikiTitles({ kind: 'current', nameVi: 'Dòng Gulf Stream', nameEn: 'Gulf Stream' }, null))
+      .toEqual({ vi: ['Dòng Gulf Stream'], en: ['Gulf Stream'] });
+  });
+  it('commodity with country → country-specific article first, then general', () => {
+    expect(featureWikiTitles({ kind: 'commodity', vi: 'Cà phê', en: 'Coffee' }, { vi: 'Ấn Độ', en: 'India' }))
+      .toEqual({ vi: ['Cà phê'], en: ['Coffee production in India', 'Coffee'] });
+  });
+  it('commodity without country → general article only', () => {
+    expect(featureWikiTitles({ kind: 'commodity', vi: 'Cà phê', en: 'Coffee' }, null))
+      .toEqual({ vi: ['Cà phê'], en: ['Coffee'] });
+  });
+});
+
+describe('climateTitles', () => {
+  it('builds Climate of {country} + vi candidates', () => {
+    expect(climateTitles('Việt Nam', 'Vietnam'))
+      .toEqual({ vi: ['Khí hậu Việt Nam', 'Khí hậu của Việt Nam'], en: ['Climate of Vietnam'] });
+  });
+});
