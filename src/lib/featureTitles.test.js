@@ -18,6 +18,10 @@ describe('featureWikiTitles', () => {
     expect(featureWikiTitles({ kind: 'commodity', vi: 'Cà phê', en: 'Coffee' }, null))
       .toEqual({ vi: ['Cà phê'], en: ['Coffee'] });
   });
+  it('climate → koppen article candidates for the code', () => {
+    expect(featureWikiTitles({ kind: 'climate', code: 'Af' }, null))
+      .toEqual({ vi: ['Khí hậu rừng mưa nhiệt đới', 'Phân loại khí hậu Köppen'], en: ['Tropical rainforest climate', 'Köppen climate classification'] });
+  });
 });
 
 describe('climateTitles', () => {

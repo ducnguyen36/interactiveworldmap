@@ -1,6 +1,11 @@
+import { koppenArticle } from './climate.js';
+
 // Build ordered Wikipedia title candidates (first match wins) per language for a
 // non-country feature selection. countryName is { vi, en } or null.
 export function featureWikiTitles(feature, countryName) {
+  if (feature.kind === 'climate') {
+    return koppenArticle(feature.code);
+  }
   if (feature.kind === 'volcano') {
     return { vi: [feature.name], en: [feature.name] };
   }
