@@ -2,9 +2,9 @@ import { useLanguage } from '../context/LanguageContext.jsx';
 import { useTheme } from '../context/ThemeContext.jsx';
 
 const MODES = [
-  { id: 'vi', label: 'Tiếng Việt' },
-  { id: 'en', label: 'English' },
-  { id: 'dual', label: 'Song ngữ' },
+  { id: 'vi', labelKey: 'lang.vietnamese', flags: ['vn'] },
+  { id: 'en', labelKey: 'lang.english', flags: ['gb'] },
+  { id: 'dual', labelKey: 'lang.dual', flags: ['vn', 'gb'] },
 ];
 
 export default function Header() {
@@ -14,14 +14,25 @@ export default function Header() {
     <header className="flex items-center justify-between px-4 py-2 shadow z-[1000] relative"
             style={{ background: 'var(--panel-bg)', color: 'var(--panel-text)' }}>
       <h1 className="font-bold">{tt('app.title')}</h1>
-      <div className="flex items-center gap-3">
-        <label className="sr-only" htmlFor="lang">{tt('lang.label')}</label>
-        <select id="lang" value={mode} onChange={(e) => setMode(e.target.value)}
-                className="border rounded px-2 py-1 bg-transparent">
-          {MODES.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
-        </select>
-        <button onClick={toggleTheme} aria-label={tt('theme.toggle')}
-                className="border rounded px-2 py-1">
+      <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
+          {MODES.map((m) => (
+            <button
+              key={m.id}
+              onClick={() => setMode(m.id)}
+              title={tt(m.labelKey)}
+              aria-label={tt(m.labelKey)}
+              aria-pressed={mode === m.id}
+              className={`flex items-center gap-0.5 rounded border px-1 py-0.5 transition
+                ${mode === m.id ? 'ring-2 ring-blue-500 opacity-100' : 'opacity-50 hover:opacity-90'}`}
+            >
+              {m.flags.map((code) => (
+                <img key={code} src={`https://flagcdn.com/w40/${code}.png`} alt="" className="h-4 w-auto rounded-sm" />
+              ))}
+            </button>
+          ))}
+        </div>
+        <button onClick={toggleTheme} aria-label={tt('theme.toggle')} className="border rounded px-2 py-1">
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
       </div>
