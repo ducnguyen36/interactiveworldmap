@@ -31,7 +31,7 @@ html, body, #root { height: 100%; margin: 0; }
 
 .leaflet-container { background: var(--map-ocean); font: inherit; }
 
-.country { fill: var(--map-land); stroke: var(--map-stroke); stroke-width: 0.5; }
+.country { stroke: var(--map-stroke); stroke-width: 0.5; }
 .country:hover { fill: var(--map-land-hover); }
 .country-selected { fill: var(--map-land-hover); stroke: #2563eb; stroke-width: 1.5; }
 

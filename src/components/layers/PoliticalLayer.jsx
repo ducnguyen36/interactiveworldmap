@@ -4,6 +4,7 @@ import { useGeoData } from '../../hooks/useGeoData.js';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 import { useSelection } from '../../context/SelectionContext.jsx';
 import { dualText } from '../../lib/dualText.js';
+import { mapColor } from '../../lib/mapColor.js';
 
 export default function PoliticalLayer() {
   const { data } = useGeoData('/data/countries.geojson');
@@ -56,7 +57,7 @@ export default function PoliticalLayer() {
       ref={geoRef}
       data={data}
       onEachFeature={onEachFeature}
-      style={() => ({ className: 'country', fillOpacity: 1, weight: 0.5 })}
+      style={(f) => ({ className: 'country', fillColor: mapColor(f.properties.MAPCOLOR7), fillOpacity: 1, weight: 0.5 })}
     />
   );
 }
