@@ -1,15 +1,43 @@
 import { useLanguage } from '../context/LanguageContext.jsx';
 import { useSelection } from '../context/SelectionContext.jsx';
 import { useWikiInfo } from '../hooks/useWikiInfo.js';
+import { useWikiSummary } from '../hooks/useWikiSummary.js';
+import { useGeoData } from '../hooks/useGeoData.js';
 import { dualText } from '../lib/dualText.js';
+import { featureWikiTitles } from '../lib/featureTitles.js';
+import WikiExtracts from './WikiExtracts.jsx';
+import CountryLayerFacts from './CountryLayerFacts.jsx';
 
-export default function InfoPanel({ injectedSelection }) {
+export default function InfoPanel({ injectedSelection, activeOverlayIds = new Set() }) {
   const { mode, tt } = useLanguage();
   const { selected, setSelected } = useSelection();
   const feature = injectedSelection !== undefined ? injectedSelection : selected;
-  const { data, loading, error, retry } = useWikiInfo(feature, mode);
+  const kind = (feature && feature.kind) || 'country';
+
+  // Country: Wikidata + Wikipedia (only for country kind).
+  const wiki = useWikiInfo(feature && kind === 'country' ? feature : null, mode);
+
+  // Commodity needs its country's name (from cached countries data) to build the title.
+  const { data: countries } = useGeoData(kind === 'commodity' ? '/data/countries.geojson' : null);
+  let countryName = null;
+  if (kind === 'commodity' && countries) {
+    const cf = countries.features.find((x) => x.properties.ISO_A2 === feature.iso2);
+    if (cf) countryName = { vi: cf.properties.NAME_VI, en: cf.properties.NAME_EN };
+  }
+  const summary = useWikiSummary(feature && kind !== 'country' ? featureWikiTitles(feature, countryName) : null, mode);
 
   if (!feature) return null;
+
+  const title =
+    kind === 'volcano' ? (feature.name || '') :
+    kind === 'commodity' ? dualText(feature.vi, feature.en, mode) :
+    dualText(feature.nameVi, feature.nameEn, mode);
+
+  const featureLabel =
+    kind === 'current' ? tt(feature.type === 'warm' ? 'legend.warmCurrent' : 'legend.coldCurrent') :
+    kind === 'volcano' ? tt('legend.volcano') :
+    kind === 'commodity' ? `${tt('panel.majorProducer')}${countryName ? ': ' + dualText(countryName.vi, countryName.en, mode) : ''}` :
+    null;
 
   return (
     <aside className="absolute top-0 right-0 h-full w-80 max-w-[85vw] z-[1000] overflow-y-auto shadow-2xl p-4"
@@ -17,37 +45,48 @@ export default function InfoPanel({ injectedSelection }) {
       <button onClick={() => setSelected(null)} className="float-right text-xl leading-none"
               aria-label={tt('panel.close')}>×</button>
 
-      <h2 className="text-lg font-bold pr-6">{dualText(feature.nameVi, feature.nameEn, mode)}</h2>
+      <h2 className="text-lg font-bold pr-6">
+        {kind === 'commodity' && <span className="mr-1">{feature.icon}</span>}
+        {title}
+      </h2>
 
-      {loading && <p className="mt-4 opacity-70">{tt('panel.loading')}</p>}
-
-      {error && (
-        <div className="mt-4">
-          <p className="opacity-70">{tt('panel.noData')}</p>
-          <button onClick={retry} className="mt-2 px-3 py-1 rounded border">{tt('panel.retry')}</button>
-        </div>
-      )}
-
-      {data && !loading && (
-        <div className="mt-3 space-y-3">
-          {data.flag && <img src={data.flag} alt="" className="w-24 border" />}
-          {data.capital && (
-            <p><span className="font-semibold">{tt('panel.capital')}: </span>
-              {dualText(data.capital.vi, data.capital.en, mode)}</p>
-          )}
-          {data.population != null && (
-            <p><span className="font-semibold">{tt('panel.population')}: </span>
-              {data.population.toLocaleString(mode === 'en' ? 'en-US' : 'vi-VN')}</p>
-          )}
-          {data.extracts.map((ex) => (
-            <div key={ex.lang}>
-              {ex.thumbnail && <img src={ex.thumbnail} alt="" className="float-right ml-2 w-16 rounded" />}
-              <p className="text-sm leading-relaxed">{ex.extract}</p>
-              <a className="text-sm text-blue-500 underline"
-                 href={`https://${ex.lang}.wikipedia.org/wiki/${encodeURIComponent(ex.title)}`}
-                 target="_blank" rel="noreferrer">{tt('panel.readMore')}</a>
+      {kind === 'country' ? (
+        <>
+          {wiki.loading && <p className="mt-4 opacity-70">{tt('panel.loading')}</p>}
+          {wiki.error && (
+            <div className="mt-4">
+              <p className="opacity-70">{tt('panel.noData')}</p>
+              <button onClick={wiki.retry} className="mt-2 px-3 py-1 rounded border">{tt('panel.retry')}</button>
             </div>
-          ))}
+          )}
+          {wiki.data && !wiki.loading && (
+            <div className="mt-3 space-y-3">
+              {wiki.data.flag && <img src={wiki.data.flag} alt="" className="w-24 border" />}
+              {wiki.data.capital && (
+                <p><span className="font-semibold">{tt('panel.capital')}: </span>
+                  {dualText(wiki.data.capital.vi, wiki.data.capital.en, mode)}</p>
+              )}
+              {wiki.data.population != null && (
+                <p><span className="font-semibold">{tt('panel.population')}: </span>
+                  {wiki.data.population.toLocaleString(mode === 'en' ? 'en-US' : 'vi-VN')}</p>
+              )}
+              <WikiExtracts extracts={wiki.data.extracts} />
+            </div>
+          )}
+          <CountryLayerFacts
+            iso2={feature.iso2} bounds={feature.bounds}
+            nameVi={feature.nameVi} nameEn={feature.nameEn}
+            activeOverlayIds={activeOverlayIds}
+          />
+        </>
+      ) : (
+        <div className="mt-3 space-y-3">
+          {featureLabel && <p className="text-sm font-semibold opacity-80">{featureLabel}</p>}
+          {summary.loading && <p className="opacity-70">{tt('panel.loading')}</p>}
+          {!summary.loading && summary.extracts.length === 0 && (
+            <p className="opacity-70">{tt('panel.noData')}</p>
+          )}
+          <WikiExtracts extracts={summary.extracts} />
         </div>
       )}
     </aside>

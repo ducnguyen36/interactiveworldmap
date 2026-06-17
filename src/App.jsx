@@ -35,7 +35,7 @@ export default function App() {
                 activeOverlayIds={activeOverlayIds} toggleOverlay={toggleOverlay}
               />
               <Legend activeOverlayIds={activeOverlayIds} />
-              <InfoPanel />
+              <InfoPanel activeOverlayIds={activeOverlayIds} />
             </main>
           </div>
         </SelectionProvider>
