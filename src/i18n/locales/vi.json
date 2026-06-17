@@ -29,5 +29,11 @@
   "legend.climateE": "Cực (E)",
   "lang.vietnamese": "Tiếng Việt",
   "lang.english": "English",
-  "lang.dual": "Song ngữ"
+  "lang.dual": "Song ngữ",
+  "panel.layerDetails": "Thông tin theo lớp",
+  "panel.agricultureProducts": "Nông sản chính",
+  "panel.volcanoes": "Số núi lửa",
+  "panel.climateNote": "Xem các đới khí hậu trên bản đồ.",
+  "panel.currentsNote": "Xem các dòng biển trên bản đồ.",
+  "panel.majorProducer": "Nước sản xuất chính"
 }

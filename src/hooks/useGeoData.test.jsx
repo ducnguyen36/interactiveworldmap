@@ -22,4 +22,12 @@ describe('useGeoData', () => {
     await waitFor(() => expect(result.current.error).not.toBe(null));
     expect(result.current.data).toBe(null);
   });
+
+  it('is inert when url is falsy (no fetch)', () => {
+    globalThis.fetch = vi.fn();
+    const { result } = renderHook(() => useGeoData(null));
+    expect(result.current.loading).toBe(false);
+    expect(result.current.data).toBe(null);
+    expect(globalThis.fetch).not.toHaveBeenCalled();
+  });
 });

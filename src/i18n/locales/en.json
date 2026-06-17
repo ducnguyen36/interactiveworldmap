@@ -29,5 +29,11 @@
   "legend.climateE": "Polar (E)",
   "lang.vietnamese": "Tiếng Việt",
   "lang.english": "English",
-  "lang.dual": "Song ngữ"
+  "lang.dual": "Song ngữ",
+  "panel.layerDetails": "Layer details",
+  "panel.agricultureProducts": "Major agricultural products",
+  "panel.volcanoes": "Volcanoes",
+  "panel.climateNote": "See climate zones on the map.",
+  "panel.currentsNote": "See ocean currents on the map.",
+  "panel.majorProducer": "Major producer"
 }

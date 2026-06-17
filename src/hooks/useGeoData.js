@@ -5,12 +5,13 @@ export function _clearGeoCache() { cache.clear(); }
 
 export function useGeoData(url) {
   const [state, setState] = useState(() =>
-    cache.has(url)
+    url && cache.has(url)
       ? { data: cache.get(url), loading: false, error: null }
-      : { data: null, loading: true, error: null }
+      : { data: null, loading: !!url, error: null }
   );
 
   useEffect(() => {
+    if (!url) { setState({ data: null, loading: false, error: null }); return; }
     if (cache.has(url)) {
       setState({ data: cache.get(url), loading: false, error: null });
       return;
