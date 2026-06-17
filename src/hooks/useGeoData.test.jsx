@@ -30,4 +30,12 @@ describe('useGeoData', () => {
     expect(result.current.data).toBe(null);
     expect(globalThis.fetch).not.toHaveBeenCalled();
   });
+
+  it('resolves a root-absolute path against the Vite base URL', async () => {
+    const f = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) });
+    globalThis.fetch = f;
+    renderHook(() => useGeoData('/data/x.geojson'));
+    await waitFor(() => expect(f).toHaveBeenCalled());
+    expect(f).toHaveBeenCalledWith(import.meta.env.BASE_URL + 'data/x.geojson');
+  });
 });
