@@ -17,7 +17,7 @@ export default function MapView({ activeBaseId, activeOverlayIds }) {
       attributionControl={false}
       className="h-full w-full"
     >
-      <ZoomControl position="topright" />
+      <ZoomControl position="topleft" />
       <AttributionControl position="bottomright" prefix="Natural Earth · Köppen-Geiger · FAO · Wikipedia" />
       {active.map((l) => l.component && <l.component key={l.id} />)}
     </MapContainer>

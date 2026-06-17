@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext.jsx';
 export default function LayerControl({ activeBaseId, setActiveBaseId, activeOverlayIds, toggleOverlay }) {
   const { tt } = useLanguage();
   return (
-    <div className="absolute top-4 left-4 z-[1000] rounded-lg shadow-lg p-3 text-sm"
+    <div className="absolute top-20 left-4 z-[1000] rounded-lg shadow-lg p-3 text-sm"
          style={{ background: 'var(--panel-bg)', color: 'var(--panel-text)' }}>
       <h2 className="font-semibold mb-2">{tt('control.title')}</h2>
       <p className="uppercase text-xs opacity-60 mb-1">{tt('control.base')}</p>

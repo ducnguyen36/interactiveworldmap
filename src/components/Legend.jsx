@@ -9,7 +9,7 @@ function swatchStyle(item) {
   return { ...base, height: '12px' };
 }
 
-export default function Legend({ activeOverlayIds }) {
+export default function Legend({ activeOverlayIds = new Set() }) {
   const { mode, tt } = useLanguage();
   const active = LAYERS.filter((l) => l.legend && activeOverlayIds.has(l.id));
   if (active.length === 0) return null;

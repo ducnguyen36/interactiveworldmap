@@ -4,6 +4,7 @@ import CurrentsLayer from '../components/layers/CurrentsLayer.jsx';
 import ClimateLayer from '../components/layers/ClimateLayer.jsx';
 import AgricultureLayer from '../components/layers/AgricultureLayer.jsx';
 import { COMMODITIES } from './commodities.js';
+import { climateClass } from '../lib/climate.js';
 
 export const LAYERS = [
   { id: 'political', labelKey: 'layer.political', kind: 'base', enabledByDefault: true, component: PoliticalLayer },
@@ -23,13 +24,10 @@ export const LAYERS = [
   },
   {
     id: 'climate', labelKey: 'layer.climate', kind: 'overlay', component: ClimateLayer,
-    legend: { items: [
-      { swatch: '#2e7d32', labelKey: 'legend.climateA' },
-      { swatch: '#e0c060', labelKey: 'legend.climateB' },
-      { swatch: '#9ccc65', labelKey: 'legend.climateC' },
-      { swatch: '#80cbc4', labelKey: 'legend.climateD' },
-      { swatch: '#cfd8dc', labelKey: 'legend.climateE' },
-    ] },
+    legend: { items: ['A', 'B', 'C', 'D', 'E'].map((g) => ({
+      swatch: climateClass(g).color,
+      labelKey: `legend.climate${g}`,
+    })) },
   },
   {
     id: 'agriculture', labelKey: 'layer.agriculture', kind: 'overlay', component: AgricultureLayer,
