@@ -14,12 +14,12 @@ export default function ClimateLayer() {
   // style/onEachFeature are memoized so their identity stays stable across re-renders.
   // Otherwise react-leaflet's GeoJSON re-applies `style` to every feature on each render
   // (it runs setStyle when the style prop identity changes), wiping the click highlight.
-  const style = useCallback((f) => ({
-    fillColor: climateClass(f.properties.CODE).color,
-    fillOpacity: 0.8,
-    weight: 0,
-    color: '#111111',
-  }), []);
+  const style = useCallback((f) => {
+    const color = climateClass(f.properties.CODE).color;
+    // A thin same-color stroke masks any hairline gaps between independently-smoothed
+    // adjacent polygons (invisible otherwise; hover/click override it).
+    return { fillColor: color, fillOpacity: 0.8, weight: 0.5, color };
+  }, []);
 
   const onEachFeature = useCallback((feature, layer) => {
     layer.on({
