@@ -3,7 +3,9 @@ import { createContext, useContext, useState, useMemo } from 'react';
 const SelectionContext = createContext(null);
 
 export function SelectionProvider({ children }) {
-  const [selected, setSelected] = useState(null); // { wikidata, iso2, nameVi, nameEn, population }
+  // selected is null or a discriminated object: { kind: 'country'|'climate'|'current'|'volcano'|'commodity',
+  // ...kind-specific fields, focus: { bounds } | { center: [lat, lng] } }.
+  const [selected, setSelected] = useState(null);
   const value = useMemo(() => ({ selected, setSelected }), [selected]);
   return <SelectionContext.Provider value={value}>{children}</SelectionContext.Provider>;
 }
