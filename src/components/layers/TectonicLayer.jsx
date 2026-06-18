@@ -22,7 +22,10 @@ export default function TectonicLayer() {
           onEachFeature={(feature, layer) => {
             const name = feature.properties?.name || null;
             if (name) layer.bindTooltip(name, { sticky: true });
-            layer.on('click', () => setSelected({ kind: 'volcano', name }));
+            layer.on('click', () => {
+              const ll = layer.getLatLng();
+              setSelected({ kind: 'volcano', name, focus: { center: [ll.lat, ll.lng] } });
+            });
           }}
         />
       )}

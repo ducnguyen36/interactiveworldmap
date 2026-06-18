@@ -3,6 +3,7 @@ import { GeoJSON } from 'react-leaflet';
 import { useGeoData } from '../../hooks/useGeoData.js';
 import { useSelection } from '../../context/SelectionContext.jsx';
 import { climateClass } from '../../lib/climate.js';
+import { boundsToObj } from '../../lib/bounds.js';
 
 export default function ClimateLayer() {
   const { data } = useGeoData('/data/climate.geojson');
@@ -29,7 +30,7 @@ export default function ClimateLayer() {
         e.target.setStyle({ weight: 2, color: '#111111', fillOpacity: 0.9 });
         e.target.bringToFront();
         selectedRef.current = e.target;
-        setSelected({ kind: 'climate', code: feature.properties.CODE });
+        setSelected({ kind: 'climate', code: feature.properties.CODE, focus: { bounds: boundsToObj(e.target.getBounds()) } });
       },
     });
   }, [setSelected]);

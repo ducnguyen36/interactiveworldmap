@@ -19,7 +19,7 @@ export default function AgricultureLayer() {
           <Marker
             key={`${c.id}-${i}`}
             position={loc.coord}
-            eventHandlers={{ click: () => setSelected({ kind: 'commodity', id: c.id, vi: c.vi, en: c.en, icon: c.icon, iso2: loc.iso2 }) }}
+            eventHandlers={{ click: () => setSelected({ kind: 'commodity', id: c.id, vi: c.vi, en: c.en, icon: c.icon, iso2: loc.iso2, focus: { center: loc.coord } }) }}
             icon={L.divIcon({
               className: 'ag-marker',
               html: `<span style="font-size:16px">${c.icon}</span>`,

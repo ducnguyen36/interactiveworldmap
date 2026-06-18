@@ -5,6 +5,7 @@ import { useLanguage } from '../../context/LanguageContext.jsx';
 import { dualText } from '../../lib/dualText.js';
 import { useSelection } from '../../context/SelectionContext.jsx';
 import { bearing } from '../../lib/bearing.js';
+import { boundsToObj } from '../../lib/bounds.js';
 
 export default function CurrentsLayer() {
   const { data } = useGeoData('/data/currents.geojson');
@@ -21,7 +22,7 @@ export default function CurrentsLayer() {
         onEachFeature={(f, layer) => {
           const p = f.properties;
           layer.bindTooltip(dualText(p.name_vi, p.name_en, mode), { sticky: true });
-          layer.on('click', () => setSelected({ kind: 'current', nameVi: p.name_vi, nameEn: p.name_en, type: p.type }));
+          layer.on('click', () => setSelected({ kind: 'current', nameVi: p.name_vi, nameEn: p.name_en, type: p.type, focus: { bounds: boundsToObj(layer.getBounds()) } }));
         }}
       />
       {data.features.map((f, i) => {
