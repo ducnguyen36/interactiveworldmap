@@ -16,7 +16,9 @@ export default function MapController() {
       const f = selected.focus;
       if (f.bounds) {
         const b = f.bounds;
-        map.fitBounds([[b.south, b.west], [b.north, b.east]], { animate: true, maxZoom: 6, padding: [20, 20] });
+        // flyToBounds (not fitBounds with animate:true, which silently no-ops here) gives a
+        // reliable smooth zoom that fits the feature.
+        map.flyToBounds([[b.south, b.west], [b.north, b.east]], { maxZoom: 6, padding: [20, 20] });
       } else if (f.center) {
         map.flyTo(f.center, Math.max(map.getZoom(), 6), { animate: true });
       }
