@@ -1,8 +1,9 @@
 import { useRef, useEffect } from 'react';
-import { GeoJSON, useMap } from 'react-leaflet';
+import { GeoJSON } from 'react-leaflet';
 import { useGeoData } from '../../hooks/useGeoData.js';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 import { useSelection } from '../../context/SelectionContext.jsx';
+import { boundsToObj } from '../../lib/bounds.js';
 import { dualText } from '../../lib/dualText.js';
 import { mapColor } from '../../lib/mapColor.js';
 
@@ -10,7 +11,6 @@ export default function PoliticalLayer() {
   const { data } = useGeoData('/data/countries.geojson');
   const { mode } = useLanguage();
   const { selected, setSelected } = useSelection();
-  const map = useMap();
   const geoRef = useRef(null);
   const selectedElRef = useRef(null);
 
@@ -38,15 +38,15 @@ export default function PoliticalLayer() {
         if (selectedElRef.current) selectedElRef.current.classList.remove('country-selected');
         const el = layer.getElement();
         if (el) { el.classList.add('country-selected'); selectedElRef.current = el; }
-        const b = layer.getBounds();
+        const bounds = boundsToObj(layer.getBounds());
         setSelected({
           kind: 'country',
           wikidata: p.WIKIDATAID || null,
           iso2: p.ISO_A2 && p.ISO_A2 !== '-99' ? p.ISO_A2 : null,
           nameVi: p.NAME_VI, nameEn: p.NAME_EN, population: p.POP_EST ?? null,
-          bounds: { south: b.getSouth(), west: b.getWest(), north: b.getNorth(), east: b.getEast() },
+          bounds,
+          focus: { bounds },
         });
-        map.fitBounds(b, { animate: true, maxZoom: 5, padding: [20, 20] });
       },
     });
   };

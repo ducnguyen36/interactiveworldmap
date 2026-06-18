@@ -1,5 +1,6 @@
 import { MapContainer, ZoomControl, AttributionControl } from 'react-leaflet';
 import { LAYERS } from '../data/layers.js';
+import MapController from './MapController.jsx';
 
 export default function MapView({ activeBaseId, activeOverlayIds }) {
   const active = LAYERS.filter(
@@ -17,6 +18,7 @@ export default function MapView({ activeBaseId, activeOverlayIds }) {
       attributionControl={false}
       className="h-full w-full"
     >
+      <MapController />
       <ZoomControl position="topleft" />
       <AttributionControl position="bottomright" prefix="Natural Earth · Köppen-Geiger · FAO · Wikipedia" />
       {active.map((l) => l.component && <l.component key={l.id} />)}
