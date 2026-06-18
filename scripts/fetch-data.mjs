@@ -1,4 +1,6 @@
 import { writeFile, mkdir } from 'node:fs/promises';
+import simplify from '@turf/simplify';
+import polygonSmooth from '@turf/polygon-smooth';
 
 const OUT = new URL('../public/data/', import.meta.url);
 
@@ -34,14 +36,34 @@ function trimCountries(fc) {
   };
 }
 
+// Smooth a blocky 0.5°-grid climate feature: simplify the staircase, then round corners
+// (Chaikin via polygonSmooth). polygonSmooth splits MultiPolygons into multiple Polygon
+// features, so recombine them into one MultiPolygon. Fall back to the raw geometry on error.
+function smoothClimateFeature(f) {
+  const code = f.properties?.CODE ?? null;
+  try {
+    const simplified = simplify(
+      { type: 'Feature', properties: {}, geometry: f.geometry },
+      { tolerance: 0.2, highQuality: true, mutate: false }
+    );
+    const fc = polygonSmooth(simplified, { iterations: 2 });
+    const coords = [];
+    for (const ft of fc.features) {
+      const g = ft.geometry;
+      if (g.type === 'Polygon') coords.push(g.coordinates);
+      else if (g.type === 'MultiPolygon') coords.push(...g.coordinates);
+    }
+    if (coords.length === 0) throw new Error('no smoothed geometry');
+    return { type: 'Feature', properties: { CODE: code }, geometry: { type: 'MultiPolygon', coordinates: coords } };
+  } catch {
+    return { type: 'Feature', properties: { CODE: code }, geometry: f.geometry };
+  }
+}
+
 function trimClimate(fc) {
   return {
     type: 'FeatureCollection',
-    features: fc.features.map((f) => ({
-      type: 'Feature',
-      properties: { CODE: f.properties.CODE ?? null },
-      geometry: f.geometry,
-    })),
+    features: fc.features.map(smoothClimateFeature),
   };
 }
 

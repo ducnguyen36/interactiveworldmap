@@ -21,6 +21,8 @@
     "@testing-library/jest-dom": "6.4.6",
     "@testing-library/react": "16.0.0",
     "@testing-library/user-event": "14.5.2",
+    "@turf/polygon-smooth": "^7.3.5",
+    "@turf/simplify": "^7.3.5",
     "@vitejs/plugin-react": "4.3.1",
     "autoprefixer": "10.4.19",
     "jsdom": "24.1.0",
