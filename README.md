@@ -1,8 +1,9 @@
 # Interactive World Map (Bản đồ Thế giới Tương tác)
 
-An interactive, vector world map for Vietnamese geography/geology teachers. Vietnamese
-labels by default, click-to-zoom, a Wikipedia/Wikidata info panel, toggleable thematic
-layers (Political + Tectonic), VI/EN/Dual language, and light/dark themes.
+An interactive 3D globe for Vietnamese geography/geology teachers — built for TV
+touchscreens and iPads as well as desktops. Vietnamese labels by default, tap-to-focus,
+a Wikipedia/Wikidata info panel, five toggleable thematic layers, VI/EN/Dual language,
+and light/dark themes.
 
 ## Requirements
 - Node.js 18+
@@ -31,15 +32,18 @@ npm run dev                   # http://localhost:5173
   (commodity markers). The Layer Control and Legend are both driven by `src/data/layers.js`.
 - **Info panel:** flag (flagcdn by ISO code), population (`POP_EST`), capital + article
   titles (Wikidata), and the intro extract (Wikipedia REST summary).
-- **Themes:** the `dark` class on `<html>` toggles CSS variables used by both Tailwind
-  and the Leaflet SVG. Language switcher uses flag images (`flagcdn`).
+- **Themes:** the `dark` class on `<html>` toggles CSS variables used by Tailwind and the
+  globe's theme-reactive paints. Language switcher uses flag images (`flagcdn`).
 
 ## Adding a new layer
-1. Build a component in `src/components/layers/` (rendered inside the Leaflet map; it may
-   use `useMap()` and `useGeoData()`).
+1. Build a component in `src/components/layers/` rendering react-map-gl
+   `<Source>/<Layer>` (or `<Marker>`s) — it receives a `center` prop ([lng, lat]) for
+   backside-culling HTML markers on the globe.
 2. Add an entry to `src/data/layers.js`:
-   `{ id, labelKey, kind: 'base'|'overlay', component, legend }` and a `layer.<id>` string
-   in both `src/i18n/locales/vi.json` and `en.json`.
+   `{ id, labelKey, kind: 'base'|'overlay', component, legend, interactiveLayerIds?,
+   selectFeature? }` and a `layer.<id>` string in both `src/i18n/locales/vi.json` and
+   `en.json`. `interactiveLayerIds` + `selectFeature(feature)` make the layer's features
+   tappable (the returned selection drives the info panel and the fly-to focus).
 
 The Layer Control, map, and Legend pick it up automatically.
 
