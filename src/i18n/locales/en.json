@@ -11,6 +11,8 @@
   "control.base": "Base map",
   "control.overlays": "Overlays",
   "control.comingSoon": "Coming soon",
+  "control.legend": "Legend",
+  "kiosk.fullscreen": "Fullscreen",
   "layer.political": "Political Map",
   "layer.tectonic": "Tectonic Plates & Volcanoes",
   "layer.currents": "Ocean Currents",

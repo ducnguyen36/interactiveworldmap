@@ -44,9 +44,9 @@ export default function InfoPanel({ injectedSelection, activeOverlayIds = new Se
     null;
 
   return (
-    <aside className="absolute top-0 right-0 h-full w-80 max-w-[85vw] z-[1000] overflow-y-auto shadow-2xl p-4"
+    <aside className="absolute z-[1100] overflow-y-auto shadow-2xl p-4 bottom-0 left-0 right-0 h-1/2 w-full rounded-t-2xl md:top-0 md:right-0 md:bottom-auto md:left-auto md:h-full md:w-96 md:max-w-[85vw] md:rounded-none"
            style={{ background: 'var(--panel-bg)', color: 'var(--panel-text)' }}>
-      <button onClick={() => setSelected(null)} className="float-right text-xl leading-none"
+      <button onClick={() => setSelected(null)} className="float-right text-3xl leading-none p-2 -mt-2 -mr-2 min-h-11 min-w-11"
               aria-label={tt('panel.close')}>×</button>
 
       <h2 className="text-lg font-bold pr-6">

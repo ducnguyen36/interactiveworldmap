@@ -23,7 +23,7 @@ export default function Header() {
               title={tt(m.labelKey)}
               aria-label={tt(m.labelKey)}
               aria-pressed={mode === m.id}
-              className={`flex items-center gap-0.5 rounded border px-1 py-0.5 transition
+              className={`flex items-center gap-0.5 rounded border px-1 py-0.5 transition min-h-11 min-w-11
                 ${mode === m.id ? 'ring-2 ring-blue-500 opacity-100' : 'opacity-50 hover:opacity-90'}`}
             >
               {m.flags.map((code) => (
@@ -32,9 +32,17 @@ export default function Header() {
             </button>
           ))}
         </div>
-        <button onClick={toggleTheme} aria-label={tt('theme.toggle')} className="border rounded px-2 py-1">
+        <button onClick={toggleTheme} aria-label={tt('theme.toggle')} className="border rounded px-2 py-1 min-h-11 min-w-11">
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
+        <button
+          onClick={() => {
+            if (document.fullscreenElement) document.exitFullscreen?.();
+            else document.documentElement.requestFullscreen?.();
+          }}
+          aria-label={tt('kiosk.fullscreen')} title={tt('kiosk.fullscreen')}
+          className="border rounded px-2 py-1 min-h-11 min-w-11"
+        >⛶</button>
       </div>
     </header>
   );
