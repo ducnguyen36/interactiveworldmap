@@ -31,4 +31,19 @@ describe('layer registry', () => {
       }
     }
   });
+  it('political exposes hit-test config and maps a feature to a country selection', () => {
+    const byId = Object.fromEntries(LAYERS.map((l) => [l.id, l]));
+    expect(byId.political.interactiveLayerIds).toEqual(['political-fill']);
+    const feature = {
+      id: 0, source: 'countries', layer: { id: 'political-fill' },
+      properties: { NAME_VI: 'Việt Nam', NAME_EN: 'Vietnam', WIKIDATAID: 'Q881', ISO_A2: 'VN', POP_EST: 97000000 },
+      geometry: { type: 'Polygon', coordinates: [[[102, 8], [110, 8], [110, 23], [102, 8]]] },
+    };
+    const sel = byId.political.selectFeature(feature);
+    expect(sel.kind).toBe('country');
+    expect(sel.iso2).toBe('VN');
+    expect(sel.nameVi).toBe('Việt Nam');
+    expect(sel.bounds).toEqual({ south: 8, west: 102, north: 23, east: 110 });
+    expect(sel.focus).toEqual({ bounds: sel.bounds });
+  });
 });

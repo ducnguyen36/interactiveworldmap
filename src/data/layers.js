@@ -5,9 +5,27 @@ import ClimateLayer from '../components/layers/ClimateLayer.jsx';
 import AgricultureLayer from '../components/layers/AgricultureLayer.jsx';
 import { COMMODITIES } from './commodities.js';
 import { climateClass } from '../lib/climate.js';
+import { geojsonBounds } from '../lib/geojsonBounds.js';
+import { fullGeometry } from '../lib/fullGeometry.js';
 
 export const LAYERS = [
-  { id: 'political', labelKey: 'layer.political', kind: 'base', enabledByDefault: true, component: PoliticalLayer },
+  {
+    id: 'political', labelKey: 'layer.political', kind: 'base', enabledByDefault: true,
+    component: PoliticalLayer,
+    interactiveLayerIds: ['political-fill'],
+    selectFeature: (feature) => {
+      const p = feature.properties;
+      const bounds = geojsonBounds(fullGeometry('/data/countries.geojson', feature) ?? feature.geometry);
+      return {
+        kind: 'country',
+        wikidata: p.WIKIDATAID || null,
+        iso2: p.ISO_A2 && p.ISO_A2 !== '-99' ? p.ISO_A2 : null,
+        nameVi: p.NAME_VI, nameEn: p.NAME_EN, population: p.POP_EST ?? null,
+        bounds,
+        focus: bounds ? { bounds } : null,
+      };
+    },
+  },
   {
     id: 'climate', labelKey: 'layer.climate', kind: 'overlay', component: ClimateLayer,
     legend: { items: ['A', 'B', 'C', 'D', 'E'].map((g) => ({

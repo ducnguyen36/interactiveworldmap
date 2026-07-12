@@ -1,63 +1,67 @@
-import { useRef, useEffect } from 'react';
-import { GeoJSON } from 'react-leaflet';
+import { useMemo } from 'react';
+import { Source, Layer } from 'react-map-gl/maplibre';
 import { useGeoData } from '../../hooks/useGeoData.js';
 import { useLanguage } from '../../context/LanguageContext.jsx';
-import { useSelection } from '../../context/SelectionContext.jsx';
-import { boundsToObj } from '../../lib/bounds.js';
-import { dualText } from '../../lib/dualText.js';
-import { mapColor } from '../../lib/mapColor.js';
+import { mapcolor7Expression } from '../../lib/mapExpressions.js';
+import { countryLabelPoints, oceanLabelPoints } from '../../lib/labelPoints.js';
+import { assetUrl } from '../../lib/assetUrl.js';
+
+const FONT = ['Klokantech Noto Sans Regular'];
 
 export default function PoliticalLayer() {
-  const { data } = useGeoData('/data/countries.geojson');
   const { mode } = useLanguage();
-  const { selected, setSelected } = useSelection();
-  const geoRef = useRef(null);
-  const selectedElRef = useRef(null);
+  // Raw data (cached app-wide) drives label placement and full-geometry lookups.
+  const { data: countries } = useGeoData('/data/countries.geojson');
+  const { data: oceans } = useGeoData('/data/oceans.json');
 
-  // Clear the highlight when the selection is cleared elsewhere (e.g. panel close).
-  useEffect(() => {
-    if (!selected && selectedElRef.current) {
-      selectedElRef.current.classList.remove('country-selected');
-      selectedElRef.current = null;
-    }
-  }, [selected]);
-
-  if (!data) return null;
-
-  const onEachFeature = (feature, layer) => {
-    const p = feature.properties;
-    const label = dualText(p.NAME_VI, p.NAME_EN, mode);
-    const isMajor = (p.LABELRANK ?? 9) <= 2;
-    layer.bindTooltip(label, isMajor
-      ? { permanent: true, direction: 'center', className: 'country-label' }
-      : { sticky: true });
-    layer.on({
-      mouseover: (e) => e.target.setStyle({ weight: 1.2 }),
-      mouseout: (e) => geoRef.current?.resetStyle(e.target),
-      click: () => {
-        if (selectedElRef.current) selectedElRef.current.classList.remove('country-selected');
-        const el = layer.getElement();
-        if (el) { el.classList.add('country-selected'); selectedElRef.current = el; }
-        const bounds = boundsToObj(layer.getBounds());
-        setSelected({
-          kind: 'country',
-          wikidata: p.WIKIDATAID || null,
-          iso2: p.ISO_A2 && p.ISO_A2 !== '-99' ? p.ISO_A2 : null,
-          nameVi: p.NAME_VI, nameEn: p.NAME_EN, population: p.POP_EST ?? null,
-          bounds,
-          focus: { bounds },
-        });
-      },
-    });
-  };
+  const countryLabels = useMemo(() => (countries ? countryLabelPoints(countries, mode) : null), [countries, mode]);
+  const oceanLabels = useMemo(() => (oceans ? oceanLabelPoints(oceans, mode) : null), [oceans, mode]);
+  const fillColor = useMemo(() => mapcolor7Expression(), []);
 
   return (
-    <GeoJSON
-      key={mode}
-      ref={geoRef}
-      data={data}
-      onEachFeature={onEachFeature}
-      style={(f) => ({ className: 'country', fillColor: mapColor(f.properties.MAPCOLOR7), fillOpacity: 1, weight: 0.5 })}
-    />
+    <>
+      <Source id="countries" type="geojson" data={assetUrl('data/countries.geojson')} generateId>
+        <Layer
+          id="political-fill"
+          type="fill"
+          paint={{
+            'fill-color': fillColor,
+            'fill-opacity': [
+              'case',
+              ['boolean', ['feature-state', 'hover'], false], 0.8,
+              1,
+            ],
+          }}
+        />
+        <Layer
+          id="political-border"
+          type="line"
+          paint={{
+            'line-color': ['case', ['boolean', ['feature-state', 'selected'], false], '#2563eb', '#7a8288'],
+            'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 2.5, 0.6],
+          }}
+        />
+      </Source>
+      {countryLabels && (
+        <Source id="country-labels" type="geojson" data={countryLabels}>
+          <Layer
+            id="country-label-text"
+            type="symbol"
+            layout={{ 'text-field': ['get', 'label'], 'text-font': FONT, 'text-size': 12 }}
+            paint={{ 'text-color': '#1f2933', 'text-halo-color': 'rgba(255,255,255,0.85)', 'text-halo-width': 1.2 }}
+          />
+        </Source>
+      )}
+      {oceanLabels && (
+        <Source id="ocean-labels" type="geojson" data={oceanLabels}>
+          <Layer
+            id="ocean-label-text"
+            type="symbol"
+            layout={{ 'text-field': ['get', 'label'], 'text-font': FONT, 'text-size': 13, 'text-letter-spacing': 0.1 }}
+            paint={{ 'text-color': '#2f6fb0', 'text-opacity': 0.8 }}
+          />
+        </Source>
+      )}
+    </>
   );
 }
