@@ -1,12 +1,17 @@
 import { useMemo } from 'react';
 import { Source, Layer } from 'react-map-gl/maplibre';
+import { useGeoData } from '../../hooks/useGeoData.js';
 import { climateColorExpression } from '../../lib/mapExpressions.js';
-import { assetUrl } from '../../lib/assetUrl.js';
+
+const EMPTY_FC = { type: 'FeatureCollection', features: [] };
 
 export default function ClimateLayer() {
+  // Single fetch via the app cache — this also primes fullGeometry's lookup so
+  // climate clicks zoom to the full zone, not the tile-clipped fragment.
+  const { data } = useGeoData('/data/climate.geojson');
   const fillColor = useMemo(() => climateColorExpression(), []);
   return (
-    <Source id="climate" type="geojson" data={assetUrl('data/climate.geojson')} generateId>
+    <Source id="climate" type="geojson" data={data ?? EMPTY_FC} generateId>
       <Layer
         id="climate-fill"
         type="fill"

@@ -1,15 +1,17 @@
 import { Source, Layer, Marker } from 'react-map-gl/maplibre';
 import { useGeoData } from '../../hooks/useGeoData.js';
 import { currentColorExpression } from '../../lib/mapExpressions.js';
-import { assetUrl } from '../../lib/assetUrl.js';
 import { bearing } from '../../lib/bearing.js';
 import { isFrontFacing } from '../../lib/isFrontFacing.js';
 
+const EMPTY_FC = { type: 'FeatureCollection', features: [] };
+
 export default function CurrentsLayer({ center = [0, 20] }) {
+  // Single fetch: the cached data feeds the map source AND the arrow markers.
   const { data } = useGeoData('/data/currents.geojson');
   return (
     <>
-      <Source id="currents" type="geojson" data={assetUrl('data/currents.geojson')} generateId>
+      <Source id="currents" type="geojson" data={data ?? EMPTY_FC} generateId>
         <Layer
           id="currents-line"
           type="line"
