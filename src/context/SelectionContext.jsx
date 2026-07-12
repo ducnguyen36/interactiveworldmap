@@ -4,7 +4,7 @@ const SelectionContext = createContext(null);
 
 export function SelectionProvider({ children }) {
   // selected is null or a discriminated object: { kind: 'country'|'climate'|'current'|'volcano'|'commodity',
-  // ...kind-specific fields, focus: { bounds } | { center: [lat, lng] } }.
+  // ...kind-specific fields, focus: { bounds } | { center: [lng, lat] } }.
   const [selected, setSelected] = useState(null);
   const value = useMemo(() => ({ selected, setSelected }), [selected]);
   return <SelectionContext.Provider value={value}>{children}</SelectionContext.Provider>;

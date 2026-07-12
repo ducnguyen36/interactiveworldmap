@@ -40,9 +40,14 @@ export const LAYERS = [
   },
   {
     id: 'tectonic', labelKey: 'layer.tectonic', kind: 'overlay', component: TectonicLayer,
+    interactiveLayerIds: ['volcano-circle'],
+    selectFeature: (feature) => {
+      const c = feature.geometry?.coordinates ?? null;
+      return { kind: 'volcano', name: feature.properties.name ?? null, focus: c ? { center: c } : null };
+    },
     legend: { items: [
-      { swatch: 'var(--plate)', shape: 'line', labelKey: 'legend.plateBoundary' },
-      { swatch: 'var(--volcano)', shape: 'dot', labelKey: 'legend.volcano' },
+      { swatch: '#d64545', shape: 'line', labelKey: 'legend.plateBoundary' },
+      { swatch: '#b91c1c', shape: 'dot', labelKey: 'legend.volcano' },
     ] },
   },
   {

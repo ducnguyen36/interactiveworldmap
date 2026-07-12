@@ -1,34 +1,24 @@
-import L from 'leaflet';
-import { GeoJSON } from 'react-leaflet';
-import { useGeoData } from '../../hooks/useGeoData.js';
-import { useSelection } from '../../context/SelectionContext.jsx';
+import { Source, Layer } from 'react-map-gl/maplibre';
+import { assetUrl } from '../../lib/assetUrl.js';
 
 export default function TectonicLayer() {
-  const { data: plates } = useGeoData('/data/plates.geojson');
-  const { data: volcanoes } = useGeoData('/data/volcanoes.geojson');
-  const { setSelected } = useSelection();
-
   return (
     <>
-      {plates && (
-        <GeoJSON data={plates} style={() => ({ className: 'plate-boundary', weight: 1.5 })} />
-      )}
-      {volcanoes && (
-        <GeoJSON
-          data={volcanoes}
-          pointToLayer={(feature, latlng) =>
-            L.circleMarker(latlng, { radius: 3.5, className: 'volcano', fillOpacity: 0.9 })
-          }
-          onEachFeature={(feature, layer) => {
-            const name = feature.properties?.name || null;
-            if (name) layer.bindTooltip(name, { sticky: true });
-            layer.on('click', () => {
-              const ll = layer.getLatLng();
-              setSelected({ kind: 'volcano', name, focus: { center: [ll.lat, ll.lng] } });
-            });
+      <Source id="plates" type="geojson" data={assetUrl('data/plates.geojson')}>
+        <Layer id="plates-line" type="line" paint={{ 'line-color': '#d64545', 'line-width': 1.5 }} />
+      </Source>
+      <Source id="volcanoes" type="geojson" data={assetUrl('data/volcanoes.geojson')} generateId>
+        <Layer
+          id="volcano-circle"
+          type="circle"
+          paint={{
+            'circle-radius': ['case', ['boolean', ['feature-state', 'selected'], false], 6.5, 4],
+            'circle-color': '#b91c1c',
+            'circle-stroke-color': '#ffffff',
+            'circle-stroke-width': 1,
           }}
         />
-      )}
+      </Source>
     </>
   );
 }

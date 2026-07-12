@@ -63,4 +63,13 @@ describe('layer registry', () => {
     expect(selK).toMatchObject({ kind: 'current', nameVi: 'Dòng Gulf Stream', nameEn: 'Gulf Stream', type: 'warm' });
     expect(selK.focus.bounds).toEqual({ south: 25, west: -80, north: 45, east: -35 });
   });
+  it('tectonic selectFeature maps a volcano point', () => {
+    const byId = Object.fromEntries(LAYERS.map((l) => [l.id, l]));
+    const v = { id: 7, source: 'volcanoes', layer: { id: 'volcano-circle' },
+      properties: { name: 'Acatenango' },
+      geometry: { type: 'Point', coordinates: [-90.876, 14.501] } };
+    const sel = byId.tectonic.selectFeature(v);
+    expect(sel).toMatchObject({ kind: 'volcano', name: 'Acatenango' });
+    expect(sel.focus).toEqual({ center: [-90.876, 14.501] });
+  });
 });
