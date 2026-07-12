@@ -1,47 +1,36 @@
-import L from 'leaflet';
-import { GeoJSON, Marker } from 'react-leaflet';
+import { Source, Layer, Marker } from 'react-map-gl/maplibre';
 import { useGeoData } from '../../hooks/useGeoData.js';
-import { useLanguage } from '../../context/LanguageContext.jsx';
-import { dualText } from '../../lib/dualText.js';
-import { useSelection } from '../../context/SelectionContext.jsx';
+import { currentColorExpression } from '../../lib/mapExpressions.js';
+import { assetUrl } from '../../lib/assetUrl.js';
 import { bearing } from '../../lib/bearing.js';
-import { boundsToObj } from '../../lib/bounds.js';
+import { isFrontFacing } from '../../lib/isFrontFacing.js';
 
-export default function CurrentsLayer() {
+export default function CurrentsLayer({ center = [0, 20] }) {
   const { data } = useGeoData('/data/currents.geojson');
-  const { mode } = useLanguage();
-  const { setSelected } = useSelection();
-  if (!data) return null;
-
   return (
     <>
-      <GeoJSON
-        key={mode}
-        data={data}
-        style={(f) => ({ className: f.properties.type === 'warm' ? 'current-warm' : 'current-cold', weight: 2.5 })}
-        onEachFeature={(f, layer) => {
-          const p = f.properties;
-          layer.bindTooltip(dualText(p.name_vi, p.name_en, mode), { sticky: true });
-          layer.on('click', () => setSelected({ kind: 'current', nameVi: p.name_vi, nameEn: p.name_en, type: p.type, focus: { bounds: boundsToObj(layer.getBounds()) } }));
-        }}
-      />
-      {data.features.map((f, i) => {
+      <Source id="currents" type="geojson" data={assetUrl('data/currents.geojson')} generateId>
+        <Layer
+          id="currents-line"
+          type="line"
+          layout={{ 'line-cap': 'round' }}
+          paint={{
+            'line-color': currentColorExpression('#e05252', '#3b82f6'),
+            'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 4.5, 2.5],
+          }}
+        />
+      </Source>
+      {data && data.features.map((f, i) => {
         const cs = f.geometry.coordinates;
         const a = cs[cs.length - 2];
         const b = cs[cs.length - 1];
-        const deg = bearing(a, b) - 90; // '➤' glyph points east (90°) by default
-        const cls = f.properties.type === 'warm' ? 'arrow-warm' : 'arrow-cold';
+        if (!isFrontFacing(center, b)) return null;
+        const deg = bearing(a, b) - 90; // '➤' points east by default
+        const color = f.properties.type === 'warm' ? '#e05252' : '#3b82f6';
         return (
-          <Marker
-            key={i}
-            position={[b[1], b[0]]}
-            interactive={false}
-            icon={L.divIcon({
-              className: 'current-arrow',
-              html: `<span class="${cls}" style="display:inline-block;font-size:16px;transform:rotate(${deg}deg)">➤</span>`,
-              iconSize: [16, 16],
-            })}
-          />
+          <Marker key={i} longitude={b[0]} latitude={b[1]}>
+            <span style={{ display: 'inline-block', fontSize: 16, color, transform: `rotate(${deg}deg)`, pointerEvents: 'none' }}>➤</span>
+          </Marker>
         );
       })}
     </>

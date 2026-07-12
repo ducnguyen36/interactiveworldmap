@@ -28,6 +28,11 @@ export const LAYERS = [
   },
   {
     id: 'climate', labelKey: 'layer.climate', kind: 'overlay', component: ClimateLayer,
+    interactiveLayerIds: ['climate-fill'],
+    selectFeature: (feature) => {
+      const bounds = geojsonBounds(fullGeometry('/data/climate.geojson', feature) ?? feature.geometry);
+      return { kind: 'climate', code: feature.properties.CODE, focus: bounds ? { bounds } : null };
+    },
     legend: { items: ['A', 'B', 'C', 'D', 'E'].map((g) => ({
       swatch: climateClass(g).color,
       labelKey: `legend.climate${g}`,
@@ -42,9 +47,15 @@ export const LAYERS = [
   },
   {
     id: 'currents', labelKey: 'layer.currents', kind: 'overlay', component: CurrentsLayer,
+    interactiveLayerIds: ['currents-line'],
+    selectFeature: (feature) => {
+      const p = feature.properties;
+      const bounds = geojsonBounds(fullGeometry('/data/currents.geojson', feature) ?? feature.geometry);
+      return { kind: 'current', nameVi: p.name_vi, nameEn: p.name_en, type: p.type, focus: bounds ? { bounds } : null };
+    },
     legend: { items: [
-      { swatch: 'var(--current-warm)', shape: 'line', labelKey: 'legend.warmCurrent' },
-      { swatch: 'var(--current-cold)', shape: 'line', labelKey: 'legend.coldCurrent' },
+      { swatch: '#e05252', shape: 'line', labelKey: 'legend.warmCurrent' },
+      { swatch: '#3b82f6', shape: 'line', labelKey: 'legend.coldCurrent' },
     ] },
   },
   {

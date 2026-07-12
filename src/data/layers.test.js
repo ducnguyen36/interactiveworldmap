@@ -46,4 +46,21 @@ describe('layer registry', () => {
     expect(sel.bounds).toEqual({ south: 8, west: 102, north: 23, east: 110 });
     expect(sel.focus).toEqual({ bounds: sel.bounds });
   });
+  it('climate and currents selectFeature map hit-test features', () => {
+    const byId = Object.fromEntries(LAYERS.map((l) => [l.id, l]));
+    const zone = { id: 3, source: 'climate', layer: { id: 'climate-fill' },
+      properties: { CODE: 'Af' },
+      geometry: { type: 'Polygon', coordinates: [[[0, 0], [2, 0], [2, 2], [0, 0]]] } };
+    const selC = byId.climate.selectFeature(zone);
+    expect(selC.kind).toBe('climate');
+    expect(selC.code).toBe('Af');
+    expect(selC.focus.bounds).toEqual({ south: 0, west: 0, north: 2, east: 2 });
+
+    const cur = { id: 1, source: 'currents', layer: { id: 'currents-line' },
+      properties: { name_vi: 'Dòng Gulf Stream', name_en: 'Gulf Stream', type: 'warm' },
+      geometry: { type: 'LineString', coordinates: [[-80, 25], [-35, 45]] } };
+    const selK = byId.currents.selectFeature(cur);
+    expect(selK).toMatchObject({ kind: 'current', nameVi: 'Dòng Gulf Stream', nameEn: 'Gulf Stream', type: 'warm' });
+    expect(selK.focus.bounds).toEqual({ south: 25, west: -80, north: 45, east: -35 });
+  });
 });
