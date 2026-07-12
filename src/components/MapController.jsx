@@ -1,29 +1,30 @@
 import { useEffect, useRef } from 'react';
-import { useMap } from 'react-leaflet';
+import { useMap } from 'react-map-gl/maplibre';
 import { useSelection } from '../context/SelectionContext.jsx';
 
-// Selection-driven map zoom: focus the clicked feature; restore the prior view on close.
+// Selection-driven camera: fly to the clicked feature; restore the prior view on close.
+// focus is { bounds: {south,west,north,east} } or { center: [lng, lat] }.
 export default function MapController() {
-  const map = useMap();
+  const { current: map } = useMap();
   const { selected } = useSelection();
   const savedView = useRef(null);
 
   useEffect(() => {
+    if (!map) return;
     if (selected && selected.focus) {
       if (!savedView.current) {
-        savedView.current = { center: map.getCenter(), zoom: map.getZoom() };
+        const c = map.getCenter();
+        savedView.current = { center: [c.lng, c.lat], zoom: map.getZoom() };
       }
       const f = selected.focus;
       if (f.bounds) {
         const b = f.bounds;
-        // flyToBounds (not fitBounds with animate:true, which silently no-ops here) gives a
-        // reliable smooth zoom that fits the feature.
-        map.flyToBounds([[b.south, b.west], [b.north, b.east]], { maxZoom: 6, padding: [20, 20] });
+        map.fitBounds([[b.west, b.south], [b.east, b.north]], { maxZoom: 5.5, padding: 40, duration: 1200 });
       } else if (f.center) {
-        map.flyTo(f.center, Math.max(map.getZoom(), 6), { animate: true });
+        map.flyTo({ center: f.center, zoom: Math.max(map.getZoom(), 5.5), duration: 1200 });
       }
     } else if (!selected && savedView.current) {
-      map.flyTo(savedView.current.center, savedView.current.zoom, { animate: true });
+      map.flyTo({ center: savedView.current.center, zoom: savedView.current.zoom, duration: 1200 });
       savedView.current = null;
     }
   }, [selected, map]);
