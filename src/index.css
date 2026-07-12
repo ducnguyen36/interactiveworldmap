@@ -2,29 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Panel theming. Map colors live in src/lib/mapStyle.js (theme-keyed constants),
+   not CSS vars — MapLibre paints are set from the React theme value directly. */
 :root {
-  --map-ocean: #cfe8f3;
-  --map-land: #e9e6d8;
-  --map-stroke: #9aa0a6;
-  --map-land-hover: #d8e8c8;
   --panel-bg: #ffffff;
   --panel-text: #1f2933;
-  --plate: #d64545;
-  --volcano: #b91c1c;
-  --current-warm: #d64545;
-  --current-cold: #2f6fb0;
 }
 .dark {
-  --map-ocean: #0b1f2a;
-  --map-land: #2a3b2e;
-  --map-stroke: #5b6b5e;
-  --map-land-hover: #3c5440;
   --panel-bg: #111827;
   --panel-text: #e5e7eb;
-  --plate: #f87171;
-  --volcano: #fca5a5;
-  --current-warm: #f87171;
-  --current-cold: #60a5fa;
 }
 
 html, body, #root { height: 100%; margin: 0; }

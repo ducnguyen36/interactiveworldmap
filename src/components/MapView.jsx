@@ -2,7 +2,7 @@ import { useMemo, useState, useCallback, useEffect, useRef } from 'react';
 import Map, { AttributionControl, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { LAYERS } from '../data/layers.js';
-import { baseMapStyle, cssVar } from '../lib/mapStyle.js';
+import { baseMapStyle, OCEAN_COLORS } from '../lib/mapStyle.js';
 import { useTheme } from '../context/ThemeContext.jsx';
 import { useSelection } from '../context/SelectionContext.jsx';
 import MapController from './MapController.jsx';
@@ -14,7 +14,10 @@ export default function MapView({ activeBaseId, activeOverlayIds }) {
   const selectedFsRef = useRef(null); // { source, id } carrying the 'selected' feature-state
   const hoverFsRef = useRef(null);
   const [center, setCenter] = useState([0, 20]); // [lng, lat] for marker backside culling
-  const mapStyle = useMemo(() => baseMapStyle(), []);
+  // Initial style only — theme flips are applied via setPaintProperty (recreating the
+  // style object would reload every source).
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const mapStyle = useMemo(() => baseMapStyle(theme), []);
 
   const active = LAYERS.filter(
     (l) => (l.kind === 'base' && l.id === activeBaseId) ||
@@ -28,16 +31,12 @@ export default function MapView({ activeBaseId, activeOverlayIds }) {
     if (map.setProjection) map.setProjection({ type: 'globe' });
   }, []);
 
-  // Re-apply theme-sensitive paints when the theme flips.
+  // Re-apply the themed ocean when the theme flips (layer paints are theme-derived
+  // props inside the layer components; react-map-gl diffs and applies them itself).
   useEffect(() => {
     const map = mapRef.current?.getMap?.();
     if (!map || !map.isStyleLoaded?.()) return;
-    map.setPaintProperty('background', 'background-color', cssVar('--map-ocean', '#cfe8f3'));
-    const dark = theme === 'dark';
-    if (map.getLayer('country-label-text')) {
-      map.setPaintProperty('country-label-text', 'text-color', dark ? '#e5e7eb' : '#1f2933');
-      map.setPaintProperty('country-label-text', 'text-halo-color', dark ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.85)');
-    }
+    map.setPaintProperty('background', 'background-color', OCEAN_COLORS[theme] ?? OCEAN_COLORS.light);
   }, [theme]);
 
   // Clear the 'selected' feature-state when the selection is cleared (panel ×).
