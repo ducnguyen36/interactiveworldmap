@@ -21,8 +21,11 @@ npm run dev                   # http://localhost:5173
 - `npm run test` — run the unit/component tests (Vitest)
 
 ## How it works
-- **Base map:** Natural Earth country polygons rendered as GeoJSON (no tiles, no API keys).
-- **Labels:** `NAME_VI` / `NAME_EN` from Natural Earth, switched by language mode.
+- **Globe:** MapLibre GL renders an interactive 3D globe (drag to spin, pinch to zoom,
+  tap to select) purely from bundled GeoJSON — no tiles, no API keys. Works in the
+  browser on desktops, iPads, and touch TVs; use the fullscreen button for kiosk use.
+- **Labels:** MapLibre symbol layers with bundled Noto Sans glyphs (Latin + Vietnamese),
+  regenerable via `node scripts/fetch-glyphs.mjs`.
 - **Layers:** Political (base) + four overlays — Tectonic (plates + volcanoes), Ocean
   Currents (warm/cold arrows), Climate Zones (Köppen, translucent), and Agriculture
   (commodity markers). The Layer Control and Legend are both driven by `src/data/layers.js`.

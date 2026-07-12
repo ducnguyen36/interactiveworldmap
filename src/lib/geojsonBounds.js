@@ -1,5 +1,4 @@
 // Bounding box of any GeoJSON geometry as { south, west, north, east }.
-// Replaces the Leaflet-specific boundsToObj.
 export function geojsonBounds(geometry) {
   if (!geometry || !geometry.coordinates) return null;
   let west = Infinity, south = Infinity, east = -Infinity, north = -Infinity;
