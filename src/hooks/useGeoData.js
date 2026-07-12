@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 
 const cache = new Map();
 export function _clearGeoCache() { cache.clear(); }
+export function _primeGeoCache(url, data) { cache.set(resolveUrl(url), data); }
+export function getCachedGeoData(url) { return cache.get(resolveUrl(url)) ?? null; }
 
 // Resolve a root-absolute "/data/..." path against Vite's base URL so it works
 // at a host root and under a subpath (GitHub Pages). External/relative URLs pass through.
